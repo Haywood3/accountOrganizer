@@ -79,6 +79,7 @@ const AccountForm = () => {
                     <option hidden>Choose an Option</option>
                     <option value="home">Home</option>
                     <option value="auto">Auto</option>
+                    <option value="personal">Personal</option>
                     <option value="credit">Credit</option>
                     <option value="utilities">Utilities</option>
                   </select>
@@ -136,7 +137,7 @@ const AccountForm = () => {
                   <label className="form-label">Is Paid Off</label>
                 </div>
                 <button className="btn btn-success" type="submit">Add an Account</button>
-                <button type="submit" className="btn btn-secondary" onClick={clearForm}>Cancel</button>
+                <button type="submit" className="btn btn-secondary" onClick={clearForm}>Clear</button>
               </form >
               {errors.map((err, index) => <p key={index} style={{ color: "blue" }}>{err}</p>)}
             </CardContent>
