@@ -2,13 +2,42 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 
-const DashboardPage = () => {
+const DashboardPage = (props) => {
   const [accountList, setAccountList] = useState([])
   const [subAccountList, setsubAccountList] = useState([])
   const navigate = useNavigate()
   const [company, setCompany] = useState("")
   const [subcompany, setSubCompany] = useState("")
   const { id } = useParams()
+  const { accounts } = props;
+  const [sortedField, setSortedField] = React.useState(null);
+  const [sortConfig, setSortConfig] = React.useState(null);
+
+  React.useMemo(() => {
+    let sortedAccounts = [...accounts];
+    if (sortedField !== null) {
+      sortedAccounts.sort.localeCompare((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortedAccounts;
+  }, [accounts, sortConfig]);
+
+
+  const requestSort = key => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  }
+
 
   useEffect(() => {
     axios.get(`http://localhost:8000/api/accounts/`)
@@ -87,24 +116,24 @@ const DashboardPage = () => {
       <table className='table-hover table-primary table'>
         <thead>
           <tr col-form-label>
-            <th>Company</th>
-            <th>Category</th>
+            <th><button type="button" onClick={() => requestSort('company')}>Company</button></th>
+            <th><button type="button" onClick={() => requestSort('category')}>Category</button></th>
             <th>Frequency</th>
-            <th>Due Date</th>
+            <th><button type="button" onClick={() => requestSort('duedate')}>Due Date</button></th>
             <th>Method</th>
-            <th>Payment</th>
+            <th><button type="button" onClick={() => requestSort('payment')}>Payment</button></th>
             <th></th>
             <th>Credit Limit</th>
             <th>Owe(d)</th>
             <th>PaperLess</th>
             <th>Auto Pay</th>
-            <th>Paid Off</th>
+            <th><button type="button" onClick={() => requestSort('paidoff')}>PaidOff</button></th>
             <th colSpan={2}>Update or Delete</th>
           </tr>
         </thead>
         <tbody>
           {
-            accountList.map((eachAccount, i) => {
+            accounts.accountList.map((eachAccount, i) => {
               return (
                 <tr key={i} style={eachAccount.paidoff ? { color: 'rgb(181, 204, 255)' } : { textDecoration: "none" }}>
                   <th><Link to={`/accounts/edit/${eachAccount._id}`}>{eachAccount.company}</Link></th>
@@ -128,9 +157,9 @@ const DashboardPage = () => {
         </tbody>
       </table>
       <div className="d-flex">
-          <h5 className="subheader">Subscriptions & Auto Pay</h5>
-          <Link className="links2" to="/subaccounts/add"> Add Subscription </Link>
-        </div>
+        <h5 className="subheader">Subscriptions & Auto Pay</h5>
+        <Link className="links2" to="/subaccounts/add"> Add Subscription </Link>
+      </div>
       <table className='table table-primary table-hover'>
         <thead>
           <tr>
@@ -165,6 +194,7 @@ const DashboardPage = () => {
     </div >
 
   )
+
 }
 
-export default DashboardPage 
+export default DashboardPage
