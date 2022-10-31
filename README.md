@@ -1,4 +1,4 @@
-# accountOrganizer
+# Account Organizer Project
 
 Simple and practical...
 
