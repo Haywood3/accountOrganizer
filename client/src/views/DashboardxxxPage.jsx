@@ -1,43 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, Link, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 
-const DashboardPage = (props) => {
+const DashboardPage = () => {
   const [accountList, setAccountList] = useState([])
   const [subAccountList, setsubAccountList] = useState([])
-  const navigate = useNavigate()
   const [company, setCompany] = useState("")
   const [subcompany, setSubCompany] = useState("")
   const { id } = useParams()
-  const { accounts } = props;
-  const [sortedField, setSortedField] = React.useState(null);
-  const [sortConfig, setSortConfig] = React.useState(null);
-
-  React.useMemo(() => {
-    let sortedAccounts = [...accounts];
-    if (sortedField !== null) {
-      sortedAccounts.sort.localeCompare((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? 1 : -1;
-        }
-        return 0;
-      });
-    }
-    return sortedAccounts;
-  }, [accounts, sortConfig]);
-
-
-  const requestSort = key => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
-    }
-    setSortConfig({ key, direction });
-  }
-
+  
 
   useEffect(() => {
     axios.get(`http://localhost:8000/api/accounts/`)
@@ -107,33 +78,34 @@ const DashboardPage = (props) => {
   return (
     <div className="color">
       <div>
-        <h2 className="header"> Account Lists </h2>
+        <h2 className="header">Account Lists</h2>
       </div>
       <div className="d-flex">
         <h5 className="subheader">Expense Accounts</h5>
         <Link className="links1" to="/accounts/add">Add Account</Link>
       </div>
-      <table className='table-hover table-primary table'>
+      <table className="table-hover table-primary table">
         <thead>
-          <tr col-form-label>
-            <th><button type="button" onClick={() => requestSort('company')}>Company</button></th>
-            <th><button type="button" onClick={() => requestSort('category')}>Category</button></th>
+          <tr className="col-form-label">
+            <th>Company</th>
+            <th>Category</th>
             <th>Frequency</th>
-            <th><button type="button" onClick={() => requestSort('duedate')}>Due Date</button></th>
+            <th>Due Date</th>
             <th>Method</th>
-            <th><button type="button" onClick={() => requestSort('payment')}>Payment</button></th>
+            <th>Payment</th>
             <th></th>
             <th>Credit Limit</th>
             <th>Owe(d)</th>
             <th>PaperLess</th>
             <th>Auto Pay</th>
-            <th><button type="button" onClick={() => requestSort('paidoff')}>PaidOff</button></th>
-            <th colSpan={2}>Update or Delete</th>
+            <th>Paid Off</th>
+            <th>Update</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
           {
-            accounts.accountList.map((eachAccount, i) => {
+            accountList.map((eachAccount, i) => {
               return (
                 <tr key={i} style={eachAccount.paidoff ? { color: 'rgb(181, 204, 255)' } : { textDecoration: "none" }}>
                   <th><Link to={`/accounts/edit/${eachAccount._id}`}>{eachAccount.company}</Link></th>
@@ -169,7 +141,8 @@ const DashboardPage = (props) => {
             <th>Frequency</th>
             <th>Active</th>
             <th>Recurring</th>
-            <th colSpan={2}>Update or Delete</th>
+            <th>Update</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -181,8 +154,8 @@ const DashboardPage = (props) => {
                   <th>{eachSubAccount.amount}</th>
                   <th>{eachSubAccount.paysource}</th>
                   <th>{eachSubAccount.frequency}</th>
-                  <th>{eachSubAccount.active ? "" : "Yes"}</th>
-                  <th>{eachSubAccount.recuroff ? "Yes" : ""}</th>
+                  <th>{eachSubAccount.active ? "No" : "Yes"}</th>
+                  <th>{eachSubAccount.recuroff ? "Yes" : "No"}</th>
                   <th><Link to={`/subaccounts/edit/${eachSubAccount._id}`} className="btn btn-primary">Update</Link></th>
                   <th><button onClick={() => handleSubAcctDelete(eachSubAccount._id)} className="btn btn-danger">Delete</button></th>
                 </tr>
@@ -191,10 +164,10 @@ const DashboardPage = (props) => {
           }
         </tbody>
       </table>
+
     </div >
 
   )
-
 }
 
-export default DashboardPage
+export default DashboardPage 

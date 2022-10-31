@@ -5,7 +5,6 @@ import axios from 'axios'
 const DashboardPage = () => {
   const [accountList, setAccountList] = useState([])
   const [subAccountList, setsubAccountList] = useState([])
-  const navigate = useNavigate()
   const [company, setCompany] = useState("")
   const [subcompany, setSubCompany] = useState("")
   const { id } = useParams()
