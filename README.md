@@ -22,5 +22,3 @@ and removing the second option response for paperless, auto pay, and paid off ma
 I would like to add login/registration. 
 
 I would like to improve the overall look.
-
-Everything works, it just doesn't look very good.
