@@ -1,7 +1,5 @@
 # Account Organizer Project
 
-Simple and practical...
-
 This is an Account Organizer. This is meant to manage the who, what, where, when, how, and why of 
 all your accounts. I have separated accounts and subscriptions based on how I pay them. The accounts 
 are paid through checking and the subscriptions through a credit card.
